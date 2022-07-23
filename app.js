@@ -1,57 +1,51 @@
+const color = document.getElementById("color");
+const lineWidth = document.getElementById("line-width");
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 canvas.width = 800;
 canvas.height = 800;
-ctx.lineWidth = 1;
-
-
-// ctx.fillRect(50, 50, 100, 200); // 가로, 세로 50px 위치에 100 X 200 사각형
-
-// ctx.moveTo(50, 50); // 이동에 사용
-// ctx.lineTo(150, 50); // 선을 그으면서 이동
-// ctx.lineTo(150, 150);
-// ctx.lineTo(50, 150);
-// ctx.lineTo(50, 50);
-// ctx.fill(); // 채워주냐 안채워(stroke)주냐 선택
-
-// ctx.fillRect(200, 200, 50, 200);
-// ctx.fillRect(400, 200, 50, 200);
-// ctx.fillRect(300, 300, 50, 100);
-// ctx.fillRect(200, 200, 200, 20);
-// ctx.moveTo(200, 200);
-// ctx.lineTo(325, 100);
-// ctx.lineTo(450, 200);
-// ctx.fill();
-
-// ctx.fillRect(210 - 40, 200 - 30, 15, 100);
-// ctx.fillRect(350 - 40, 200 - 30, 15, 100);
-// ctx.fillRect(260 - 40, 200 - 30, 60, 200);
-
-// ctx.arc(250, 100, 50, 0, 2 *  Math.PI);
-// ctx.fill();
-
-// ctx.beginPath(); // 경로를 시작하거나 현재 경로를 재설정
-// ctx.fillStyle = "white";
-// ctx.arc(260 + 10, 80, 8, 0, Math.PI, 2 * Math.PI );
-// ctx.arc(220 + 10, 80, 8, 0, Math.PI, 2 * Math.PI);
-// ctx.fill();
+ctx.lineWidth = lineWidth.value; // 초기값
+let isPainting = false;
 
 const colors = [
-    "#ff9ff3", "#feca57", "#ff6b6b", "#48dbfb", "#1dd1a1", "#f368e0", "#ff9f43", "#ee5253", "#0abde3", "#10ac84", "#c8d6e5", "#222f3e"
+    "#ff9ff3", "#feca57", "#ff6b6b", "#48dbfb", "#1dd1a1", "#f368e0", "#ff9f43", "#ee5253", "#0abde3", "#10ac84", "#c8d6e5", "#222f3e", "#333"
 ];
 
-function onclick(e) {
-
-    console.log(e.offsetX, e.offsetY);
+function onMove(e) {
     
-
-    ctx.beginPath();
-    ctx.moveTo(0, 0);
-    const color = colors[Math.floor(Math.random() * colors.length)];
-    ctx.strokeStyle = color;
-    ctx.lineTo(e.offsetX, e.offsetY);
-    ctx.stroke();
-
+    if(isPainting) {
+        ctx.lineTo(e.offsetX, e.offsetY);
+        ctx.stroke();
+        return;
+    }
+    ctx.moveTo(e.offsetX, e.offsetY); // canvas 위에 마우스가 있으면 따라다님.
 }
 
-canvas.addEventListener("click", onclick);
+function startPainting() {
+    ctx.beginPath(); // 새로운 path를 만들어야 기존의 line에 영향을 안준다. onMove 함수나 cancelPainting 함수 안에 넣어도 됨.
+    // let color = colors[Math.floor(Math.random() * colors.length)]; // 랜덤 컬러
+    //ctx.strokeStyle = color;
+    isPainting = true;
+}
+
+function cancelPainting() {
+    isPainting = false;
+}
+
+function onLineWidthChange(e) { // 이벤트가 들어가야 하는 것 염두.
+    // console.log(e.target.value);
+    ctx.lineWidth =  e.target.value; // 굵기 변경
+}
+
+function onColorChange(e) { // 이벤트가 들어가야 하는 것 염두.
+    // console.log(e.target.value);
+    ctx.strokeStyle = e.target.value; // 색상 변경
+}
+
+canvas.addEventListener("mousemove", onMove);
+canvas.addEventListener("mousedown", startPainting);
+canvas.addEventListener("mouseup", cancelPainting);
+canvas.addEventListener("mouseleave", cancelPainting);
+
+lineWidth.addEventListener("change", onLineWidthChange);
+color.addEventListener("change", onColorChange);
