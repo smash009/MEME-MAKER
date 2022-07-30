@@ -1,3 +1,4 @@
+const textInput = document.getElementById("text");
 const fileInput = document.getElementById("file");
 const modeBtn = document.getElementById("mode-btn");
 const resetBtn = document.getElementById("reset-btn");
@@ -103,9 +104,19 @@ function onFileChange(e) {
         ctx.drawImage(image, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT); // 이미지를 그림
         fileInput.value = null; // file input 비우기
     }
-
 }
 
+function onDoubleClick(e){ // 저장된 텍스트를 더블 클릭하면
+    // console.log(e.offsetX, e.offsetY);
+    const text = textInput.value;
+    ctx.save(); // 설정 값을 저장 이후 restore()가 나올 때까지의 값을 저장하지 않음
+    ctx.lineWidth = 1; // 기존에 저장되어 있던 선 굵기를 1로 만들어 줌
+    ctx.font = "68px serif"
+    ctx.fillText(text, e.offsetX, e.offsetY); // fillText 혹은 strokeText 중 선택
+    ctx.restore(); // 설정 값을 복구
+}
+
+canvas.addEventListener("dblclick", onDoubleClick); // 더블 클릭할 때 저장된 텍스틀...
 canvas.addEventListener("mousemove", onMove);
 canvas.addEventListener("mousedown", startPainting);
 canvas.addEventListener("mouseup", cancelPainting);
