@@ -2,7 +2,7 @@
 body { padding: 20px; display: flex; gap: 20px; justify-content: center; align-items: center; background-color: gainsboro; }
 canvas { width: 800px; height: 800px; /*border: 5px solid #333;*/ border-radius: 10px; background-color: white; }
 .btns { gap: 20px; display: flex; flex-direction: column; justify-content: center; }
-.color-options { display: flex; gap: 10px; flex-direction: row; flex-wrap: wrap; }
+.color-options { width: 410px; min-width: 410px; display: flex; gap: 10px; flex-direction: row; flex-wrap: wrap; }
 .color-options .color-wrap { width: 100%; text-align: center; display: block; }
 .color-options .color-wrap #color { width: 70px; height: 70px; border: none; border-radius: 50%; background-color: transparent; cursor: pointer; -webkit-appearance: none; -moz-appearance: none; appearance: none; }
 .color-options .color-wrap #color::-webkit-color-swatch { border: 5px solid #333; border-radius: 50%;; border-radius: 50%; }
