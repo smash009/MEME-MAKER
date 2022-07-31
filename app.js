@@ -1,3 +1,4 @@
+const saveBtn = document.getElementById("save");
 const textInput = document.getElementById("text");
 const fileInput = document.getElementById("file");
 const modeBtn = document.getElementById("mode-btn");
@@ -16,6 +17,7 @@ const CANVAS_HEIGHT = 800; //
 canvas.width = CANVAS_WIDTH;
 canvas.height = CANVAS_HEIGHT;
 ctx.lineWidth = lineWidth.value; // 초기값, 한번만 실행
+ctx.lineCap = "round";
 let isPainting = false;
 let isFilling = false;
 
@@ -99,6 +101,7 @@ function onFileChange(e) {
     const url = URL.createObjectURL(file) // 현재 브라우저에서만 접근 가능한 url 생성
     // console.log(url); 
     const image = new Image(); // 생성자 함수, == <img src="">
+    // const image = document.createElement("img"); 윗 코드와 같다.
     image.src = url; // 이미지의 url
     image.onload = function() { // 이미지가 로드 되었을 때
         ctx.drawImage(image, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT); // 이미지를 그림
@@ -109,14 +112,25 @@ function onFileChange(e) {
 function onDoubleClick(e){ // 저장된 텍스트를 더블 클릭하면
     // console.log(e.offsetX, e.offsetY);
     const text = textInput.value;
-    ctx.save(); // 설정 값을 저장 이후 restore()가 나올 때까지의 값을 저장하지 않음
-    ctx.lineWidth = 1; // 기존에 저장되어 있던 선 굵기를 1로 만들어 줌
-    ctx.font = "68px serif"
-    ctx.fillText(text, e.offsetX, e.offsetY); // fillText 혹은 strokeText 중 선택
-    ctx.restore(); // 설정 값을 복구
+    if(text !== ""){ // text 값이 있다면
+        ctx.save(); // 현재 설정 값을 저장 이후 restore()가 나올 때까지의 값을 저장하지 않음
+        ctx.lineWidth = 1; // 기존에 저장되어 있던 선 굵기를 1로 만들어 줌;
+        ctx.font = "68px serif"
+        ctx.fillText(text, e.offsetX, e.offsetY); // fillText 혹은 strokeText 중 선택
+        ctx.restore(); // 기존 설정 값으로 복구
+    }
 }
 
-canvas.addEventListener("dblclick", onDoubleClick); // 더블 클릭할 때 저장된 텍스틀...
+function onSaveClick(){
+    //console.log(canvas.toDataURL());
+    const url = canvas.toDataURL(); // 캔버스에 그린 이미지를 url로 변환해주는 메소드 // base64 
+    const a = document.createElement("a"); // 가상 a태그 생성
+    a.href = url; // url
+    a.download = "myDrawing.png"; // download 속성을 줌 // 파일명
+    a.click(); // 클릭하면...
+}
+
+canvas.addEventListener("dblclick", onDoubleClick); // 더블 클릭할 때 저장된 텍스트를...
 canvas.addEventListener("mousemove", onMove);
 canvas.addEventListener("mousedown", startPainting);
 canvas.addEventListener("mouseup", cancelPainting);
@@ -130,6 +144,7 @@ colorOptions.forEach(color => color.addEventListener("click", onColorClick)); //
 modeBtn.addEventListener("click", onModeClick);
 resetBtn.addEventListener("click", onResetClick);
 eraserBtn.addEventListener("click", onEraserClick);
+saveBtn.addEventListener("click", onSaveClick);
 
 fileInput.addEventListener("change", onFileChange);
 
