@@ -71,10 +71,10 @@ function onModeClick() { // fill draw 모드 전환
     //console.log(modeBtn);
     if(isFilling){
         isFilling = false;
-        modeBtn.innerText = "Fill";
+        modeBtn.innerText = "🩸 Fill";
     } else {
         isFilling = true;
-        modeBtn.innerText = "Draw";
+        modeBtn.innerText = "🩸 Draw";
     }
 }
 
@@ -92,7 +92,7 @@ function onResetClick() {
 function onEraserClick() {
     ctx.strokeStyle = "#fff"; // 지운다의 개념은 흰바탕 색과 같이 그려주는 것
     isFilling = false;
-    modeBtn.innerText = "Fill";
+    modeBtn.innerText = "🩸 Fill";
 }
 
 function onFileChange(e) {
